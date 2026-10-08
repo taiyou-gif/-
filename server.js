@@ -12,6 +12,22 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// --- Basic Auth for admin page ---
+const auth = { login: 'admin', password: 'taiyou123456789' };
+
+app.use('/admin.html', (req, res, next) => {
+    const b64auth = (req.headers.authorization || '').split(' ')[1] || '';
+    const [login, password] = Buffer.from(b64auth, 'base64').toString().split(':');
+
+    if (login === auth.login && password === auth.password) {
+        return next();
+    }
+
+    res.set('WWW-Authenticate', 'Basic realm="Admin Area"');
+    res.status(401).send('Authentication required.');
+});
+
+
 // DB setup
 const dbFile = path.join(__dirname, 'research_data.sqlite');
 const db = new sqlite3.Database(dbFile, (err) => {
