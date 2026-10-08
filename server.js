@@ -10,7 +10,6 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
 
 // --- Basic Auth for admin page ---
 const auth = { login: 'admin', password: 'taiyou123456789' };
@@ -27,6 +26,7 @@ app.use('/admin.html', (req, res, next) => {
     res.status(401).send('Authentication required.');
 });
 
+app.use(express.static(path.join(__dirname, 'public')));
 
 // DB setup
 const dbFile = path.join(__dirname, 'research_data.sqlite');
