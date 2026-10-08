@@ -1,1 +1,90 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>太陽光実験アプリ 管理画面</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        .admin-container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+        .header-action {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        .csv-btn {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .csv-btn:hover {
+            background: #059669;
+        }
+    </style>
+</head>
+<body class="admin-body">
+    <div class="admin-container">
+        <div class="header-action">
+            <h1>☀️ 太陽光調査アプリ 管理ダッシュボード ☀️</h1>
+            <div style="display: flex; gap: 10px; align-items: center;">
+                <label for="name-filter" style="font-weight: bold; color: #475569;">氏名絞り込み:</label>
+                <select id="name-filter" style="padding: 0.5rem; border-radius: 5px; border: 1px solid #ccc;">
+                    <option value="">すべて</option>
+                </select>
+                <button id="download-csv" class="csv-btn">CSVダウンロード</button>
+            </div>
+        </div>
 
+        <div style="overflow-x: auto;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>調査日数</th>
+                        <th>日付</th>
+                        <th>氏名</th>
+                        <th>就寝時刻</th>
+                        <th>起床時刻</th>
+                        <th>天気</th>
+                        <th>太陽光(5分)</th>
+                        <th>眠気</th><th>気分の良さ</th><th>憂うつさ</th>
+                        <th>記録日時</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+                    <!-- Data will be inserted here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>
