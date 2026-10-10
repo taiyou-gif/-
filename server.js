@@ -10,6 +10,22 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// --- Basic Auth for admin page ---
+const auth = { login: 'sunlight reserch manage', password: 'taiyou1234567890' };
+
+app.use('/admin.html', (req, res, next) => {
+    const b64auth = (req.headers.authorization || '').split(' ')[1] || '';
+    const [login, password] = Buffer.from(b64auth, 'base64').toString().split(':');
+
+    if (login === auth.login && password === auth.password) {
+        return next();
+    }
+
+    res.set('WWW-Authenticate', 'Basic realm="Admin Area"');
+    res.status(401).send('Authentication required.');
+});
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 // DB setup
