@@ -87,9 +87,10 @@ h1 {
 
 label {
     display: block;
-    font-weight: 500;
+    font-weight: 700;
+    font-size: 1.05rem;
     margin-bottom: 0.5rem;
-    color: #475569;
+    color: #0f172a;
 }
 
 input[type="text"],
