@@ -1,0 +1,215 @@
+:root {
+    --primary-color: #f59e0b;
+    --primary-hover: #d97706;
+    --bg-color: #fef3c7;
+    --card-bg: rgba(255, 255, 255, 0.85);
+    --text-color: #334155;
+    --border-color: #fcd34d;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #fef3c7 0%, #ffe4e6 100%);
+    color: var(--text-color);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.admin-body {
+    display: block;
+}
+
+.app-container {
+    width: 100%;
+    max-width: 400px;
+    height: 100vh;
+    background: var(--card-bg);
+    box-shadow: 0 8px 32px rgba(245, 158, 11, 0.15);
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+    position: relative;
+}
+
+@media (min-width: 450px) {
+    .app-container {
+        height: auto;
+        min-height: 600px;
+        border-radius: 20px;
+        margin: 20px;
+    }
+}
+
+.screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease-in-out;
+    overflow-y: auto;
+}
+
+.screen.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+h1 {
+    font-size: 1.5rem;
+    color: #b45309;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.subtitle {
+    font-size: 0.9rem;
+    color: #64748b;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+label {
+    display: block;
+    font-weight: 700;
+    font-size: 1.05rem;
+    margin-bottom: 0.5rem;
+    color: #0f172a;
+}
+
+input[type="text"],
+input[type="time"],
+input[type="date"],
+textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    font-size: 1rem;
+    background: rgba(255, 255, 255, 0.9);
+    transition: border-color 0.2s;
+    font-family: inherit;
+}
+
+input:focus, textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+.radio-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+}
+
+.radio-btn {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem;
+    background: #fff;
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.radio-btn input {
+    margin-right: 0.5rem;
+}
+
+.primary-btn {
+    width: 100%;
+    padding: 1rem;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    margin-top: 1rem;
+}
+
+.primary-btn:hover {
+    background: var(--primary-hover);
+}
+
+.primary-btn:active {
+    transform: scale(0.98);
+}
+
+.primary-btn:disabled {
+    background: #cbd5e1;
+    cursor: not-allowed;
+}
+
+.secondary-btn {
+    width: 100%;
+    padding: 1rem;
+    background: transparent;
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 1rem;
+}
+
+/* Timer styles */
+.timer-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+#timer-display {
+    font-size: 4.5rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    font-variant-numeric: tabular-nums;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.05);
+}
+
+.status-text {
+    text-align: center;
+    margin-top: 1rem;
+    font-weight: 500;
+    color: #b45309;
+}
+
+.back-link {
+    display: block;
+    text-align: center;
+    margin-top: 1.5rem;
+    color: #64748b;
+    text-decoration: none;
+    font-size: 0.9rem;
+    cursor: pointer;
+    background: none;
+    border: none;
+    width: 100%;
+}
+.back-link:hover {
+    color: #475569;
+    text-decoration: underline;
+}

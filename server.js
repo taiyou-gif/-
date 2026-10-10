@@ -10,22 +10,6 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(cors());
 app.use(express.json());
-
-// --- Basic Auth for admin page ---
-const auth = { login: 'admin', password: 'taiyou123456789' };
-
-app.use('/admin.html', (req, res, next) => {
-    const b64auth = (req.headers.authorization || '').split(' ')[1] || '';
-    const [login, password] = Buffer.from(b64auth, 'base64').toString().split(':');
-
-    if (login === auth.login && password === auth.password) {
-        return next();
-    }
-
-    res.set('WWW-Authenticate', 'Basic realm="Admin Area"');
-    res.status(401).send('Authentication required.');
-});
-
 app.use(express.static(path.join(__dirname, 'public')));
 
 // DB setup
@@ -49,6 +33,14 @@ const db = new sqlite3.Database(dbFile, (err) => {
             sleepiness INTEGER,
             mood_good INTEGER,
             mood_depressed INTEGER,
+            q1 TEXT,
+            q2 TEXT,
+            q3 TEXT,
+            q4 TEXT,
+            q5 TEXT,
+            q6 TEXT,
+            q7 TEXT,
+            q8 TEXT,
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP
         )`, (err) => {
             if (!err) {
@@ -58,6 +50,14 @@ const db = new sqlite3.Database(dbFile, (err) => {
                 db.run(`ALTER TABLE records ADD COLUMN sleepiness INTEGER`, () => {});
                 db.run(`ALTER TABLE records ADD COLUMN mood_good INTEGER`, () => {});
                 db.run(`ALTER TABLE records ADD COLUMN mood_depressed INTEGER`, () => {});
+                db.run(`ALTER TABLE records ADD COLUMN q1 TEXT`, () => {});
+                db.run(`ALTER TABLE records ADD COLUMN q2 TEXT`, () => {});
+                db.run(`ALTER TABLE records ADD COLUMN q3 TEXT`, () => {});
+                db.run(`ALTER TABLE records ADD COLUMN q4 TEXT`, () => {});
+                db.run(`ALTER TABLE records ADD COLUMN q5 TEXT`, () => {});
+                db.run(`ALTER TABLE records ADD COLUMN q6 TEXT`, () => {});
+                db.run(`ALTER TABLE records ADD COLUMN q7 TEXT`, () => {});
+                db.run(`ALTER TABLE records ADD COLUMN q8 TEXT`, () => {});
             }
         });
     }
@@ -65,15 +65,15 @@ const db = new sqlite3.Database(dbFile, (err) => {
 
 // API Endpoint to save record
 app.post('/api/records', (req, res) => {
-    const { day_number, record_date, name, bedtime, waketime, weather, feeling, sleepiness, mood_good, mood_depressed } = req.body;
+    const { day_number, record_date, name, bedtime, waketime, weather, feeling, sleepiness, mood_good, mood_depressed, q1, q2, q3, q4, q5, q6, q7, q8 } = req.body;
     
     // sunlight_completed is true if they reached this point
     const sunlight_completed = true;
 
-    const sql = `INSERT INTO records (day_number, record_date, participant_name, bedtime, waketime, weather, sunlight_completed, feeling, sleepiness, mood_good, mood_depressed) 
-                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+    const sql = `INSERT INTO records (day_number, record_date, participant_name, bedtime, waketime, weather, sunlight_completed, feeling, sleepiness, mood_good, mood_depressed, q1, q2, q3, q4, q5, q6, q7, q8) 
+                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
                  
-    db.run(sql, [day_number, record_date, name, bedtime, waketime, weather, sunlight_completed, feeling, sleepiness, mood_good, mood_depressed], function(err) {
+    db.run(sql, [day_number, record_date, name, bedtime, waketime, weather, sunlight_completed, feeling, sleepiness, mood_good, mood_depressed, q1, q2, q3, q4, q5, q6, q7, q8], function(err) {
         if (err) {
             console.error('Error inserting record:', err.message);
             res.status(500).json({ error: 'Failed to save record.' });
@@ -96,7 +96,7 @@ app.get('/api/records', (req, res) => {
     });
 });
 
-// Start Server 
+// Start Server
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
     console.log(`Admin dashboard: http://localhost:${PORT}/admin.html`);

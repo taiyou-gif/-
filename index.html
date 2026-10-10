@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>太陽光調査アプリ</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        
+        <!-- Screen 0: Day Selection -->
+        <div id="screen-0" class="screen active">
+            <h1 style="font-size: 1.1rem; white-space: nowrap;">☀️ 調査日数を選択してください ☀️</h1>
+            <p class="subtitle" style="font-size: 1.05rem; line-height: 1.6;">本日は調査の何日目ですか？</p>
+            
+            <p id="last-day-info" style="font-size: 0.9rem; color: #b45309; font-weight: bold; text-align: center; margin-bottom: 15px; display: none;">前回は「<span id="last-day-number"></span>日目」を選択しました</p>
+            
+            <div id="day-buttons" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px;">
+                <!-- JS will inject buttons here -->
+            </div>
+        </div>
+
+        <!-- Screen 1: Initial Data Input -->
+        <div id="screen-1" class="screen">
+            <h1>☀️ おはようございます ☀️</h1>
+            <p class="subtitle" style="font-size: 1rem; line-height: 1.6;">昨日の就寝時刻と本日の起床時刻<br>また起床後の天気を教えてください</p>
+            
+            <form id="initial-form">
+                <div class="form-group">
+                    <label for="record_date">日付</label>
+                    <input type="date" id="record_date" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="name">氏名</label>
+                    <input type="text" id="name" required placeholder="氏名を入力してください">
+                </div>
+                
+                <div class="form-group">
+                    <label for="bedtime">就寝時刻</label>
+                    <input type="time" id="bedtime" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="waketime">起床時刻</label>
+                    <input type="time" id="waketime" required>
+                </div>
+
+                <div class="form-group">
+                    <label>起床後の天気</label>
+                    <div class="radio-group">
+                        <label class="radio-btn"><input type="radio" name="weather" value="晴れ" required> ☀️ 晴れ</label>
+                        <label class="radio-btn"><input type="radio" name="weather" value="曇り"> ☁️ 曇り</label>
+                        <label class="radio-btn"><input type="radio" name="weather" value="雨"> ☔️ 雨</label>
+                        <label class="radio-btn"><input type="radio" name="weather" value="雪"> ⛄️ 雪</label>
+                    </div>
+                </div>
+
+                <button type="submit" class="primary-btn">次へ（気分の入力）</button>
+                <button type="button" id="back-to-timer-btn" class="back-link">◀ タイマー画面に戻る</button>
+                <button type="button" id="back-to-day-btn-from-info" class="back-link" style="display: none;">◀ 日数選択に戻る</button>
+            </form>
+        </div>
+
+        <!-- Screen 2: Sunlight Timer -->
+        <div id="screen-2" class="screen">
+            <h1>☀️ 太陽光を浴びましょう ☀️</h1>
+            <p class="subtitle" style="font-size: 1rem; line-height: 1.6;">窓辺等の屋内もしくはベランダ等で<br>太陽光を浴びながら5分間過ごしてください</p>
+            
+            <div class="timer-container">
+                <div id="timer-display">05:00</div>
+            </div>
+            
+            <div id="timer-controls">
+                <button id="start-timer-btn" class="primary-btn">タイマーを開始する</button>
+                <button id="pause-timer-btn" class="secondary-btn" style="display: none;">一時停止</button>
+            </div>
+            
+            <button type="button" id="back-to-day-btn-from-timer" class="back-link">◀ 日数選択に戻る</button>
+            
+            <p id="timer-status" class="status-text"></p>
+            
+            <!-- Hidden audio element for alarm -->
+            <audio id="alarm-sound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
+
+            <!-- Post-timer confirmation -->
+            <div id="post-timer-confirm" style="display: none; margin-top: 2rem; text-align: center;">
+                <h3>太陽光を浴びましたか？</h3>
+                <div style="display: flex; gap: 10px; margin-top: 1rem;">
+                    <button id="confirm-yes-btn" class="primary-btn" style="margin-top: 0;">はい</button>
+                    <button id="confirm-no-btn" class="secondary-btn" style="margin-top: 0;">いいえ</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screen 3: Post-Timer Feeling & Submit -->
+        <div id="screen-3" class="screen">
+            <h1 style="font-size: 1.25rem;">☀️ ご協力ありがとうございます ☀️</h1>
+            <p class="subtitle" style="font-size: 0.95rem; line-height: 1.6;">以下の質問に回答していただき、<br>記録を送信してください</p>
+            
+            <form id="final-form">
+                <div class="form-group">
+                    <label>1. 心静かな気分だ</label>
+                    <div class="radio-group" style="grid-template-columns: 1fr;">
+                        <label class="radio-btn"><input type="radio" name="q1" value="全くあてはまらない" required> 全くあてはまらない</label>
+                        <label class="radio-btn"><input type="radio" name="q1" value="あまりあてはまらない"> あまりあてはまらない</label>
+                        <label class="radio-btn"><input type="radio" name="q1" value="よく当てはまる"> よく当てはまる</label>
+                        <label class="radio-btn"><input type="radio" name="q1" value="非常によくあてはまる"> 非常によくあてはまる</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>2. 頭の中がすっきりしている</label>
+                    <div class="radio-group" style="grid-template-columns: 1fr;">
+                        <label class="radio-btn"><input type="radio" name="q2" value="全くあてはまらない" required> 全くあてはまらない</label>
+                        <label class="radio-btn"><input type="radio" name="q2" value="あまりあてはまらない"> あまりあてはまらない</label>
+                        <label class="radio-btn"><input type="radio" name="q2" value="よく当てはまる"> よく当てはまる</label>
+                        <label class="radio-btn"><input type="radio" name="q2" value="非常によくあてはまる"> 非常によくあてはまる</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>3. くつろいだ気分だ</label>
+                    <div class="radio-group" style="grid-template-columns: 1fr;">
+                        <label class="radio-btn"><input type="radio" name="q3" value="全くあてはまらない" required> 全くあてはまらない</label>
+                        <label class="radio-btn"><input type="radio" name="q3" value="あまりあてはまらない"> あまりあてはまらない</label>
+                        <label class="radio-btn"><input type="radio" name="q3" value="よく当てはまる"> よく当てはまる</label>
+                        <label class="radio-btn"><input type="radio" name="q3" value="非常によくあてはまる"> 非常によくあてはまる</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>4. 物事を楽にやることができる</label>
+                    <div class="radio-group" style="grid-template-columns: 1fr;">
+                        <label class="radio-btn"><input type="radio" name="q4" value="全くあてはまらない" required> 全くあてはまらない</label>
+                        <label class="radio-btn"><input type="radio" name="q4" value="あまりあてはまらない"> あまりあてはまらない</label>
+                        <label class="radio-btn"><input type="radio" name="q4" value="よく当てはまる"> よく当てはまる</label>
+                        <label class="radio-btn"><input type="radio" name="q4" value="非常によくあてはまる"> 非常によくあてはまる</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>5. 生き生きしている</label>
+                    <div class="radio-group" style="grid-template-columns: 1fr;">
+                        <label class="radio-btn"><input type="radio" name="q5" value="全くあてはまらない" required> 全くあてはまらない</label>
+                        <label class="radio-btn"><input type="radio" name="q5" value="あまりあてはまらない"> あまりあてはまらない</label>
+                        <label class="radio-btn"><input type="radio" name="q5" value="よく当てはまる"> よく当てはまる</label>
+                        <label class="radio-btn"><input type="radio" name="q5" value="非常によくあてはまる"> 非常によくあてはまる</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>6. 元気いっぱいである</label>
+                    <div class="radio-group" style="grid-template-columns: 1fr;">
+                        <label class="radio-btn"><input type="radio" name="q6" value="全くあてはまらない" required> 全くあてはまらない</label>
+                        <label class="radio-btn"><input type="radio" name="q6" value="あまりあてはまらない"> あまりあてはまらない</label>
+                        <label class="radio-btn"><input type="radio" name="q6" value="よく当てはまる"> よく当てはまる</label>
+                        <label class="radio-btn"><input type="radio" name="q6" value="非常によくあてはまる"> 非常によくあてはまる</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>7. 気持ちが引き締まっている</label>
+                    <div class="radio-group" style="grid-template-columns: 1fr;">
+                        <label class="radio-btn"><input type="radio" name="q7" value="全くあてはまらない" required> 全くあてはまらない</label>
+                        <label class="radio-btn"><input type="radio" name="q7" value="あまりあてはまらない"> あまりあてはまらない</label>
+                        <label class="radio-btn"><input type="radio" name="q7" value="よく当てはまる"> よく当てはまる</label>
+                        <label class="radio-btn"><input type="radio" name="q7" value="非常によくあてはまる"> 非常によくあてはまる</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>8. 充実している</label>
+                    <div class="radio-group" style="grid-template-columns: 1fr;">
+                        <label class="radio-btn"><input type="radio" name="q8" value="全くあてはまらない" required> 全くあてはまらない</label>
+                        <label class="radio-btn"><input type="radio" name="q8" value="あまりあてはまらない"> あまりあてはまらない</label>
+                        <label class="radio-btn"><input type="radio" name="q8" value="よく当てはまる"> よく当てはまる</label>
+                        <label class="radio-btn"><input type="radio" name="q8" value="非常によくあてはまる"> 非常によくあてはまる</label>
+                    </div>
+                </div>
+                
+                <button type="submit" class="primary-btn">記録を送信する</button>
+                <button type="button" id="back-to-info-btn" class="back-link">◀ 基本情報の入力に戻る</button>
+            </form>
+        </div>
+
+        <!-- Screen 4: Success/Completion -->
+        <div id="screen-4" class="screen">
+            <h1>☀️ 送信完了 ☀️</h1>
+            <p class="subtitle">本日の記録が保存されました。ご協力ありがとうございます！</p>
+            <button class="secondary-btn" onclick="location.reload()">最初に戻る</button>
+        </div>
+
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
