@@ -237,19 +237,16 @@ if (backToDayBtnInfo) {
 // 画面3：最終送信処理
 finalForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    
-    const sleepinessVal = document.getElementById('sleepiness').value;
-    const moodGoodVal = document.getElementById('mood_good').value;
-    const moodDepressedVal = document.getElementById('mood_depressed').value;
 
-    if (sleepinessVal === '' || moodGoodVal === '' || moodDepressedVal === '') {
-        alert('すべての質問項目（眠気・気分の良さ・憂うつさ）を選択してください。');
-        return;
+    // 8つの質問の選択状態を確認
+    for (let i = 1; i <= 8; i++) {
+        const qRadio = document.querySelector(`input[name="q${i}"]:checked`);
+        if (!qRadio) {
+            alert(`すべての質問項目（質問 ${i} など）を選択してください。`);
+            return;
+        }
+        state[`q${i}`] = qRadio.value;
     }
-
-    state.sleepiness = sleepinessVal;
-    state.mood_good = moodGoodVal;
-    state.mood_depressed = moodDepressedVal;
 
     try {
         const response = await fetch('/api/records', {
