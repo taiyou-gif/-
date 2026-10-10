@@ -98,37 +98,87 @@
         <!-- Screen 3: Post-Timer Feeling & Submit -->
         <div id="screen-3" class="screen">
             <h1 style="font-size: 1.25rem;">☀️ ご協力ありがとうございます ☀️</h1>
-            <p class="subtitle" style="font-size: 0.9rem; line-height: 1.6;">最後に、今の眠気と気分を教えてください</p>
+            <p class="subtitle" style="font-size: 0.95rem; line-height: 1.6;">以下の質問に回答していただき、<br>記録を送信してください</p>
             
             <form id="final-form">
                 <div class="form-group">
-                    <label>今の眠気<br><small>(0: 全く眠気はない 〜 10: 非常に眠い)</small></label>
-                    <div style="display: flex; align-items: center; gap: 10px; margin-top: 10px;">
-                        <span>0</span>
-                        <input type="range" id="sleepiness" min="0" max="10" value="5" style="flex: 1;" oninput="document.getElementById('sleepiness_val').textContent = this.value">
-                        <span>10</span>
+                    <label>1. 心静かな気分だ</label>
+                    <div class="radio-group" style="grid-template-columns: 1fr;">
+                        <label class="radio-btn"><input type="radio" name="q1" value="全くあてはまらない" required> 全くあてはまらない</label>
+                        <label class="radio-btn"><input type="radio" name="q1" value="あまりあてはまらない"> あまりあてはまらない</label>
+                        <label class="radio-btn"><input type="radio" name="q1" value="よく当てはまる"> よく当てはまる</label>
+                        <label class="radio-btn"><input type="radio" name="q1" value="非常によくあてはまる"> 非常によくあてはまる</label>
                     </div>
-                    <div style="text-align: center; font-weight: bold; margin-top: 5px; color: var(--primary-color);">選択値: <span id="sleepiness_val">5</span></div>
                 </div>
 
                 <div class="form-group">
-                    <label>今の気分の良さ<br><small>(0: 全く良くない 〜 10: 非常に良い)</small></label>
-                    <div style="display: flex; align-items: center; gap: 10px; margin-top: 10px;">
-                        <span>0</span>
-                        <input type="range" id="mood_good" min="0" max="10" value="5" style="flex: 1;" oninput="document.getElementById('mood_good_val').textContent = this.value">
-                        <span>10</span>
+                    <label>2. 頭の中がすっきりしている</label>
+                    <div class="radio-group" style="grid-template-columns: 1fr;">
+                        <label class="radio-btn"><input type="radio" name="q2" value="全くあてはまらない" required> 全くあてはまらない</label>
+                        <label class="radio-btn"><input type="radio" name="q2" value="あまりあてはまらない"> あまりあてはまらない</label>
+                        <label class="radio-btn"><input type="radio" name="q2" value="よく当てはまる"> よく当てはまる</label>
+                        <label class="radio-btn"><input type="radio" name="q2" value="非常によくあてはまる"> 非常によくあてはまる</label>
                     </div>
-                    <div style="text-align: center; font-weight: bold; margin-top: 5px; color: var(--primary-color);">選択値: <span id="mood_good_val">5</span></div>
                 </div>
 
                 <div class="form-group">
-                    <label>今の憂うつさ<br><small>(0: 全く憂うつではない 〜 10: 非常に憂うつ)</small></label>
-                    <div style="display: flex; align-items: center; gap: 10px; margin-top: 10px;">
-                        <span>0</span>
-                        <input type="range" id="mood_depressed" min="0" max="10" value="5" style="flex: 1;" oninput="document.getElementById('mood_depressed_val').textContent = this.value">
-                        <span>10</span>
+                    <label>3. くつろいだ気分だ</label>
+                    <div class="radio-group" style="grid-template-columns: 1fr;">
+                        <label class="radio-btn"><input type="radio" name="q3" value="全くあてはまらない" required> 全くあてはまらない</label>
+                        <label class="radio-btn"><input type="radio" name="q3" value="あまりあてはまらない"> あまりあてはまらない</label>
+                        <label class="radio-btn"><input type="radio" name="q3" value="よく当てはまる"> よく当てはまる</label>
+                        <label class="radio-btn"><input type="radio" name="q3" value="非常によくあてはまる"> 非常によくあてはまる</label>
                     </div>
-                    <div style="text-align: center; font-weight: bold; margin-top: 5px; color: var(--primary-color);">選択値: <span id="mood_depressed_val">5</span></div>
+                </div>
+
+                <div class="form-group">
+                    <label>4. 物事を楽にやることができる</label>
+                    <div class="radio-group" style="grid-template-columns: 1fr;">
+                        <label class="radio-btn"><input type="radio" name="q4" value="全くあてはまらない" required> 全くあてはまらない</label>
+                        <label class="radio-btn"><input type="radio" name="q4" value="あまりあてはまらない"> あまりあてはまらない</label>
+                        <label class="radio-btn"><input type="radio" name="q4" value="よく当てはまる"> よく当てはまる</label>
+                        <label class="radio-btn"><input type="radio" name="q4" value="非常によくあてはまる"> 非常によくあてはまる</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>5. 生き生きしている</label>
+                    <div class="radio-group" style="grid-template-columns: 1fr;">
+                        <label class="radio-btn"><input type="radio" name="q5" value="全くあてはまらない" required> 全くあてはまらない</label>
+                        <label class="radio-btn"><input type="radio" name="q5" value="あまりあてはまらない"> あまりあてはまらない</label>
+                        <label class="radio-btn"><input type="radio" name="q5" value="よく当てはまる"> よく当てはまる</label>
+                        <label class="radio-btn"><input type="radio" name="q5" value="非常によくあてはまる"> 非常によくあてはまる</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>6. 元気いっぱいである</label>
+                    <div class="radio-group" style="grid-template-columns: 1fr;">
+                        <label class="radio-btn"><input type="radio" name="q6" value="全くあてはまらない" required> 全くあてはまらない</label>
+                        <label class="radio-btn"><input type="radio" name="q6" value="あまりあてはまらない"> あまりあてはまらない</label>
+                        <label class="radio-btn"><input type="radio" name="q6" value="よく当てはまる"> よく当てはまる</label>
+                        <label class="radio-btn"><input type="radio" name="q6" value="非常によくあてはまる"> 非常によくあてはまる</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>7. 気持ちが引き締まっている</label>
+                    <div class="radio-group" style="grid-template-columns: 1fr;">
+                        <label class="radio-btn"><input type="radio" name="q7" value="全くあてはまらない" required> 全くあてはまらない</label>
+                        <label class="radio-btn"><input type="radio" name="q7" value="あまりあてはまらない"> あまりあてはまらない</label>
+                        <label class="radio-btn"><input type="radio" name="q7" value="よく当てはまる"> よく当てはまる</label>
+                        <label class="radio-btn"><input type="radio" name="q7" value="非常によくあてはまる"> 非常によくあてはまる</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>8. 充実している</label>
+                    <div class="radio-group" style="grid-template-columns: 1fr;">
+                        <label class="radio-btn"><input type="radio" name="q8" value="全くあてはまらない" required> 全くあてはまらない</label>
+                        <label class="radio-btn"><input type="radio" name="q8" value="あまりあてはまらない"> あまりあてはまらない</label>
+                        <label class="radio-btn"><input type="radio" name="q8" value="よく当てはまる"> よく当てはまる</label>
+                        <label class="radio-btn"><input type="radio" name="q8" value="非常によくあてはまる"> 非常によくあてはまる</label>
+                    </div>
                 </div>
                 
                 <button type="submit" class="primary-btn">記録を送信する</button>
@@ -145,6 +195,6 @@
 
     </div>
 
-    <script src="app.js" defer></script>
+    <script src="app.js"></script>
 </body>
 </html>
