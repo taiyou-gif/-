@@ -79,24 +79,26 @@ const db = new sqlite3.Database(dbFile, (err) => {
     }
 });
 
-// API Endpoint to save record
-app.post('/api/records', (req, res) => {
-    const { day_number, record_date, name, bedtime, waketime, weather, feeling, sleepiness, mood_good, mood_depressed, q1, q2, q3, q4, q5, q6, q7, q8 } = req.body;
-    
-    // sunlight_completed is true if they reached this point
-    const sunlight_completed = true;
+app.post('/api/records', async (req, res) => {
+    const recordData = req.body;
 
-    const sql = `INSERT INTO records (day_number, record_date, participant_name, bedtime, waketime, weather, sunlight_completed, feeling, sleepiness, mood_good, mood_depressed, q1, q2, q3, q4, q5, q6, q7, q8) 
-                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-                 
-    db.run(sql, [day_number, record_date, name, bedtime, waketime, weather, sunlight_completed, feeling, sleepiness, mood_good, mood_depressed, q1, q2, q3, q4, q5, q6, q7, q8], function(err) {
-        if (err) {
-            console.error('Error inserting record:', err.message);
-            res.status(500).json({ error: 'Failed to save record.' });
-        } else {
-            res.status(201).json({ message: 'Record saved successfully!', id: this.lastID });
+    try {
+        const response = await fetch(process.env.GAS_ENDPOINT, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(recordData)
+        });
+
+        if (!response.ok) {
+            console.error("GAS error:", await response.text());
+            return res.status(500).json({ error: "GAS_error" });
         }
-    });
+
+        return res.status(201).json({ message: "Record saved to Google Sheets" });
+    } catch (err) {
+        console.error("Fetch failed:", err);
+        return res.status(500).json({ error: "fetch_failed" });
+    }
 });
 
 // API Endpoint to get all records for Admin
