@@ -42,9 +42,14 @@ function renderTable(data) {
             <td>${record.waketime}</td>
             <td>${escapeHTML(record.weather)}</td>
             <td>${record.sunlight_completed ? '✅ 完了' : '❌ 未完了'}</td>
-            <td>${record.sleepiness || ''}</td>
-            <td>${record.mood_good || ''}</td>
-            <td>${record.mood_depressed || ''}</td>
+            <td>${escapeHTML(record.q1 || '')}</td>
+            <td>${escapeHTML(record.q2 || '')}</td>
+            <td>${escapeHTML(record.q3 || '')}</td>
+            <td>${escapeHTML(record.q4 || '')}</td>
+            <td>${escapeHTML(record.q5 || '')}</td>
+            <td>${escapeHTML(record.q6 || '')}</td>
+            <td>${escapeHTML(record.q7 || '')}</td>
+            <td>${escapeHTML(record.q8 || '')}</td>
             <td>${formattedDate}</td>
         `;
         tbody.appendChild(tr);
@@ -100,7 +105,7 @@ document.getElementById('download-csv').addEventListener('click', () => {
     let csvContent = "\uFEFF"; 
     
     // ヘッダー行
-    const headers = ["ID", "調査日数", "日付", "氏名", "就寝時刻", "起床時刻", "天気", "太陽光完了", "眠気", "気分の良さ", "憂うつさ", "記録日時"];
+    const headers = ["ID", "調査日数", "日付", "氏名", "就寝時刻", "起床時刻", "天気", "太陽光完了", "Q1.心静か", "Q2.頭すっきり", "Q3.くつろいだ", "Q4.楽にできる", "Q5.生き生き", "Q6.元気", "Q7.引き締まり", "Q8.充実", "記録日時"];
     csvContent += headers.join(',') + "\r\n";
 
     // データ行
@@ -114,9 +119,14 @@ document.getElementById('download-csv').addEventListener('click', () => {
             row.waketime,
             `"${row.weather}"`,
             row.sunlight_completed ? 'TRUE' : 'FALSE',
-            row.sleepiness || '',
-            row.mood_good || '',
-            row.mood_depressed || '',
+            `"${(row.q1 || '').replace(/"/g, '""')}"`,
+            `"${(row.q2 || '').replace(/"/g, '""')}"`,
+            `"${(row.q3 || '').replace(/"/g, '""')}"`,
+            `"${(row.q4 || '').replace(/"/g, '""')}"`,
+            `"${(row.q5 || '').replace(/"/g, '""')}"`,
+            `"${(row.q6 || '').replace(/"/g, '""')}"`,
+            `"${(row.q7 || '').replace(/"/g, '""')}"`,
+            `"${(row.q8 || '').replace(/"/g, '""')}"`,
             row.created_at
         ];
         csvContent += rowData.join(',') + "\r\n";
