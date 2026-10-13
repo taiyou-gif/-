@@ -50,6 +50,15 @@ function renderTable(data) {
             <td>${escapeHTML(record.q6 || '')}</td>
             <td>${escapeHTML(record.q7 || '')}</td>
             <td>${escapeHTML(record.q8 || '')}</td>
+            <td>${escapeHTML(record.phq1 || '')}</td>
+            <td>${escapeHTML(record.phq2 || '')}</td>
+            <td>${escapeHTML(record.phq3 || '')}</td>
+            <td>${escapeHTML(record.phq4 || '')}</td>
+            <td>${escapeHTML(record.phq5 || '')}</td>
+            <td>${escapeHTML(record.phq6 || '')}</td>
+            <td>${escapeHTML(record.phq7 || '')}</td>
+            <td>${escapeHTML(record.phq8 || '')}</td>
+            <td>${escapeHTML(record.phq9 || '')}</td>
             <td>${formattedDate}</td>
         `;
         tbody.appendChild(tr);
@@ -105,7 +114,7 @@ document.getElementById('download-csv').addEventListener('click', () => {
     let csvContent = "\uFEFF"; 
     
     // ヘッダー行
-    const headers = ["ID", "調査日数", "日付", "氏名", "就寝時刻", "起床時刻", "天気", "太陽光完了", "Q1.心静か", "Q2.頭すっきり", "Q3.くつろいだ", "Q4.楽にできる", "Q5.生き生き", "Q6.元気", "Q7.引き締まり", "Q8.充実", "記録日時"];
+    const headers = ["ID", "調査日数", "日付", "氏名", "就寝時刻", "起床時刻", "天気", "太陽光完了", "Q1.心静か", "Q2.頭すっきり", "Q3.くつろいだ", "Q4.楽にできる", "Q5.生き生き", "Q6.元気", "Q7.引き締まり", "Q8.充実", "PHQ1.興味なし", "PHQ2.気分落ち込み", "PHQ3.睡眠障害", "PHQ4.倦怠感", "PHQ5.食欲不振/過食", "PHQ6.自己否定", "PHQ7.集中力低下", "PHQ8.動作遅延/焦燥", "PHQ9.希死念慮", "記録日時"];
     csvContent += headers.join(',') + "\r\n";
 
     // データ行
@@ -127,6 +136,15 @@ document.getElementById('download-csv').addEventListener('click', () => {
             `"${(row.q6 || '').replace(/"/g, '""')}"`,
             `"${(row.q7 || '').replace(/"/g, '""')}"`,
             `"${(row.q8 || '').replace(/"/g, '""')}"`,
+            `"${(row.phq1 || '').replace(/"/g, '""')}"`,
+            `"${(row.phq2 || '').replace(/"/g, '""')}"`,
+            `"${(row.phq3 || '').replace(/"/g, '""')}"`,
+            `"${(row.phq4 || '').replace(/"/g, '""')}"`,
+            `"${(row.phq5 || '').replace(/"/g, '""')}"`,
+            `"${(row.phq6 || '').replace(/"/g, '""')}"`,
+            `"${(row.phq7 || '').replace(/"/g, '""')}"`,
+            `"${(row.phq8 || '').replace(/"/g, '""')}"`,
+            `"${(row.phq9 || '').replace(/"/g, '""')}"`,
             row.created_at
         ];
         csvContent += rowData.join(',') + "\r\n";
