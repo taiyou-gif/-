@@ -107,15 +107,33 @@ app.post('/api/records', (req, res) => {
     const sql = `INSERT INTO records (day_number, record_date, participant_name, bedtime, waketime, weather, sunlight_completed, feeling, sleepiness, mood_good, mood_depressed, q1, q2, q3, q4, q5, q6, q7, q8, phq1, phq2, phq3, phq4, phq5, phq6, phq7, phq8, phq9) 
                  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
                  
-    db.run(sql, [day_number, record_date, name, bedtime, waketime, weather, sunlight_completed, feeling, sleepiness, mood_good, mood_depressed, q1, q2, q3, q4, q5, q6, q7, q8, phq1, phq2, phq3, phq4, phq5, phq6, phq7, phq8, phq9], function(err) {
-        if (err) {
-            console.error('Error inserting record:', err.message);
-            res.status(500).json({ error: 'Failed to save record.' });
-        } else {
-            res.status(201).json({ message: 'Record saved successfully!', id: this.lastID });
+   db.run(sql, [...], async function(err) {
+    if (err) {
+        console.error('Error inserting record:', err.message);
+        return res.status(500).json({ error: 'Failed to save record.' });
+    }
+
+    // ★ ここから追加（GAS に送る処理）
+    try {
+        const response = await fetch(process.env.GAS_ENDPOINT, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(req.body)
+        });
+
+        if (!response.ok) {
+            console.error("GAS error:", await response.text());
+            return res.status(500).json({ error: "GAS_error" });
         }
-    });
+
+        return res.status(201).json({ message: 'Record saved to Google Sheets' });
+
+    } catch (err) {
+        console.error("Fetch failed:", err);
+        return res.status(500).json({ error: "fetch_failed" });
+    }
 });
+
 
 // API Endpoint to get all records for Admin
 app.get('/api/records', (req, res) => {
