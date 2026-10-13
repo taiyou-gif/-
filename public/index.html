@@ -98,7 +98,7 @@
         <!-- Screen 3: Post-Timer Feeling & Submit -->
         <div id="screen-3" class="screen">
             <h1 style="font-size: 1.25rem;">☀️ ご協力ありがとうございます ☀️</h1>
-            <p class="subtitle" style="font-size: 0.95rem; line-height: 1.6;">以下の質問に回答していただき、<br>記録を送信してください</p>
+            <p class="subtitle" style="font-size: 0.9rem; line-height: 1.6; text-align: center;">以下の質問項目を読んで、今のあなたの気持ち<br>（今どのくらい感じているか）に<br>最も近いと思うものを選んでください</p>
             
             <form id="final-form">
                 <div class="form-group">
@@ -181,8 +181,109 @@
                     </div>
                 </div>
                 
-                <button type="submit" class="primary-btn">記録を送信する</button>
+                <button type="submit" id="submit-or-next-btn" class="primary-btn">記録を送信する</button>
                 <button type="button" id="back-to-info-btn" class="back-link">◀ 基本情報の入力に戻る</button>
+            </form>
+        </div>
+
+        <!-- Screen Weekly (Days 7, 14, 21): 9 Questions -->
+        <div id="screen-weekly" class="screen">
+            <h1 style="font-size: 1.25rem;">☀️ 週間アンケート ☀️</h1>
+            <p class="subtitle" style="font-size: 0.95rem; line-height: 1.6; text-align: center;">この1週間、次のような問題にどのくらい頻繁に<br>悩まされていますか？</p>
+            
+            <form id="weekly-form">
+                <div class="form-group">
+                    <label>1. 物事に対してほとんど興味がない、または楽しめない</label>
+                    <div class="radio-group" style="grid-template-columns: 1fr;">
+                        <label class="radio-btn"><input type="radio" name="phq1" value="全くない" required> 全くない</label>
+                        <label class="radio-btn"><input type="radio" name="phq1" value="数日"> 数日</label>
+                        <label class="radio-btn"><input type="radio" name="phq1" value="半分以上"> 半分以上</label>
+                        <label class="radio-btn"><input type="radio" name="phq1" value="ほとんど毎日"> ほとんど毎日</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>2. 気分が落ち込む、憂うつになる、または絶望的な気持ちになる</label>
+                    <div class="radio-group" style="grid-template-columns: 1fr;">
+                        <label class="radio-btn"><input type="radio" name="phq2" value="全くない" required> 全くない</label>
+                        <label class="radio-btn"><input type="radio" name="phq2" value="数日"> 数日</label>
+                        <label class="radio-btn"><input type="radio" name="phq2" value="半分以上"> 半分以上</label>
+                        <label class="radio-btn"><input type="radio" name="phq2" value="ほとんど毎日"> ほとんど毎日</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>3. 寝付きが悪い、途中で目がさめる、または逆に眠り過ぎる</label>
+                    <div class="radio-group" style="grid-template-columns: 1fr;">
+                        <label class="radio-btn"><input type="radio" name="phq3" value="全くない" required> 全くない</label>
+                        <label class="radio-btn"><input type="radio" name="phq3" value="数日"> 数日</label>
+                        <label class="radio-btn"><input type="radio" name="phq3" value="半分以上"> 半分以上</label>
+                        <label class="radio-btn"><input type="radio" name="phq3" value="ほとんど毎日"> ほとんど毎日</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>4. 疲れた感じがする、または気力がない</label>
+                    <div class="radio-group" style="grid-template-columns: 1fr;">
+                        <label class="radio-btn"><input type="radio" name="phq4" value="全くない" required> 全くない</label>
+                        <label class="radio-btn"><input type="radio" name="phq4" value="数日"> 数日</label>
+                        <label class="radio-btn"><input type="radio" name="phq4" value="半分以上"> 半分以上</label>
+                        <label class="radio-btn"><input type="radio" name="phq4" value="ほとんど毎日"> ほとんど毎日</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>5. あまり食欲がない、または食べ過ぎる</label>
+                    <div class="radio-group" style="grid-template-columns: 1fr;">
+                        <label class="radio-btn"><input type="radio" name="phq5" value="全くない" required> 全くない</label>
+                        <label class="radio-btn"><input type="radio" name="phq5" value="数日"> 数日</label>
+                        <label class="radio-btn"><input type="radio" name="phq5" value="半分以上"> 半分以上</label>
+                        <label class="radio-btn"><input type="radio" name="phq5" value="ほとんど毎日"> ほとんど毎日</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>6. 自分はダメな人間だ、人生の敗北者だと気に病む、または自分自身あるいは家族に申し訳がないと感じる</label>
+                    <div class="radio-group" style="grid-template-columns: 1fr;">
+                        <label class="radio-btn"><input type="radio" name="phq6" value="全くない" required> 全くない</label>
+                        <label class="radio-btn"><input type="radio" name="phq6" value="数日"> 数日</label>
+                        <label class="radio-btn"><input type="radio" name="phq6" value="半分以上"> 半分以上</label>
+                        <label class="radio-btn"><input type="radio" name="phq6" value="ほとんど毎日"> ほとんど毎日</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>7. 新聞を読む、またはテレビを見ることなどに集中することが難しい</label>
+                    <div class="radio-group" style="grid-template-columns: 1fr;">
+                        <label class="radio-btn"><input type="radio" name="phq7" value="全くない" required> 全くない</label>
+                        <label class="radio-btn"><input type="radio" name="phq7" value="数日"> 数日</label>
+                        <label class="radio-btn"><input type="radio" name="phq7" value="半分以上"> 半分以上</label>
+                        <label class="radio-btn"><input type="radio" name="phq7" value="ほとんど毎日"> ほとんど毎日</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>8. 他人が気づくぐらいに動きや話し方が遅くなる、あるいは反対に、そわそわしたり、落ちつかず、ふだんよりも動き回ることがある</label>
+                    <div class="radio-group" style="grid-template-columns: 1fr;">
+                        <label class="radio-btn"><input type="radio" name="phq8" value="全くない" required> 全くない</label>
+                        <label class="radio-btn"><input type="radio" name="phq8" value="数日"> 数日</label>
+                        <label class="radio-btn"><input type="radio" name="phq8" value="半分以上"> 半分以上</label>
+                        <label class="radio-btn"><input type="radio" name="phq8" value="ほとんど毎日"> ほとんど毎日</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>9. 死んだ方がましだ、あるいは自分を何らかの方法で傷つけようと思ったことがある</label>
+                    <div class="radio-group" style="grid-template-columns: 1fr;">
+                        <label class="radio-btn"><input type="radio" name="phq9" value="全くない" required> 全くない</label>
+                        <label class="radio-btn"><input type="radio" name="phq9" value="数日"> 数日</label>
+                        <label class="radio-btn"><input type="radio" name="phq9" value="半分以上"> 半分以上</label>
+                        <label class="radio-btn"><input type="radio" name="phq9" value="ほとんど毎日"> ほとんど毎日</label>
+                    </div>
+                </div>
+
+                <button type="submit" class="primary-btn">記録を送信する</button>
+                <button type="button" id="back-to-screen3-btn" class="back-link">◀ 前の質問画面に戻る</button>
             </form>
         </div>
 
