@@ -49,10 +49,14 @@ const screen0 = document.getElementById('screen-0');
 const screen1 = document.getElementById('screen-1');
 const screen2 = document.getElementById('screen-2');
 const screen3 = document.getElementById('screen-3');
+const screenWeekly = document.getElementById('screen-weekly');
 const screen4 = document.getElementById('screen-4');
 
 const initialForm = document.getElementById('initial-form');
 const finalForm = document.getElementById('final-form');
+const weeklyForm = document.getElementById('weekly-form');
+const submitOrNextBtn = document.getElementById('submit-or-next-btn');
+const backToScreen3Btn = document.getElementById('back-to-screen3-btn');
 const startTimerBtn = document.getElementById('start-timer-btn');
 const pauseTimerBtn = document.getElementById('pause-timer-btn');
 const timerControls = document.getElementById('timer-controls');
@@ -85,6 +89,13 @@ if (dayButtonsContainer) {
         
         btn.addEventListener('click', () => {
             state.day_number = i;
+            if (submitOrNextBtn) {
+                if (i === 7 || i === 14 || i === 21) {
+                    submitOrNextBtn.textContent = '次へ（週間アンケート）';
+                } else {
+                    submitOrNextBtn.textContent = '記録を送信する';
+                }
+            }
             const backToTimerBtn = document.getElementById('back-to-timer-btn');
             const backToDayBtnInfo = document.getElementById('back-to-day-btn-from-info');
             
@@ -199,10 +210,9 @@ confirmYesBtn.addEventListener('click', () => {
     showScreen(screen1);
 });
 
-
 // 確認画面：いいえ -> タイマーリセット
 confirmNoBtn.addEventListener('click', () => {
-    state.sunlight = 0;
+    state.sunlight = 0;   // ★ 5分浴びていないため 0 を記録
     postTimerConfirm.style.display = 'none';
     timerControls.style.display = 'block';
     startTimerBtn.style.display = 'inline-block';
@@ -237,20 +247,8 @@ if (backToDayBtnInfo) {
     });
 }
 
-// 画面3：最終送信処理
-finalForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    // 8つの質問の選択状態を確認
-    for (let i = 1; i <= 8; i++) {
-        const qRadio = document.querySelector(`input[name="q${i}"]:checked`);
-        if (!qRadio) {
-            alert(`すべての質問項目（質問 ${i} など）を選択してください。`);
-            return;
-        }
-        state[`q${i}`] = qRadio.value;
-    }
-
+// 記録送信処理（共通）
+async function sendRecord() {
     try {
         const response = await fetch('/api/records', {
             method: 'POST',
@@ -272,4 +270,54 @@ finalForm.addEventListener('submit', async (e) => {
         console.error('Error:', error);
         alert('通信エラーが発生しました。ネットワークを確認してください。');
     }
+}
+
+// 画面3：送信または週間アンケートへ進む処理
+finalForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    // 8つの質問の選択状態を確認
+    for (let i = 1; i <= 8; i++) {
+        const qRadio = document.querySelector(`input[name="q${i}"]:checked`);
+        if (!qRadio) {
+            alert(`すべての質問項目（質問 ${i} など）を選択してください。`);
+            return;
+        }
+        state[`q${i}`] = qRadio.value;
+    }
+
+    // 7日目、14日目、21日目は週間アンケート画面へ進む
+    if (state.day_number === 7 || state.day_number === 14 || state.day_number === 21) {
+        showScreen(screenWeekly);
+    } else {
+        // 通常日はここで送信
+        await sendRecord();
+    }
 });
+
+// 週間アンケート画面：送信処理
+if (weeklyForm) {
+    weeklyForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        // PHQ-9 (9項目) の選択状態を確認
+        for (let i = 1; i <= 9; i++) {
+            const phqRadio = document.querySelector(`input[name="phq${i}"]:checked`);
+            if (!phqRadio) {
+                alert(`週間アンケートの質問 ${i} を選択してください。`);
+                return;
+            }
+            state[`phq${i}`] = phqRadio.value;
+        }
+
+        // 送信
+        await sendRecord();
+    });
+}
+
+// 週間アンケートから画面3へ戻るボタン
+if (backToScreen3Btn) {
+    backToScreen3Btn.addEventListener('click', () => {
+        showScreen(screen3);
+    });
+}
