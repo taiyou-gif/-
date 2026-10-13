@@ -132,8 +132,8 @@ app.post('/api/records', (req, res) => {
         console.error("Fetch failed:", err);
         return res.status(500).json({ error: "fetch_failed" });
     }
-});
-
+  });
+}); 
 
 // API Endpoint to get all records for Admin
 app.get('/api/records', (req, res) => {
