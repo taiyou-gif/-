@@ -206,11 +206,13 @@ pauseTimerBtn.addEventListener('click', () => {
 
 // 確認画面：はい -> 次の画面へ（Info）
 confirmYesBtn.addEventListener('click', () => {
+    state.sunlight = 1;   // ★ 5分浴びたので 1 を記録
     showScreen(screen1);
 });
 
 // 確認画面：いいえ -> タイマーリセット
 confirmNoBtn.addEventListener('click', () => {
+    state.sunlight = 0;   // ★ 5分浴びていないため 0 を記録
     postTimerConfirm.style.display = 'none';
     timerControls.style.display = 'block';
     startTimerBtn.style.display = 'inline-block';
