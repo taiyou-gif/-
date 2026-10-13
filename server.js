@@ -107,8 +107,36 @@ app.post('/api/records', (req, res) => {
     const sql = `INSERT INTO records (day_number, record_date, participant_name, bedtime, waketime, weather, sunlight_completed, feeling, sleepiness, mood_good, mood_depressed, q1, q2, q3, q4, q5, q6, q7, q8, phq1, phq2, phq3, phq4, phq5, phq6, phq7, phq8, phq9) 
                  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
                  
-   db.run(sql, [ day_number, record_date, name, bedtime, waketime, weather, sunlight_completed, q1, q2, q3, q4, q5, q6, q7, q8, phq1, phq2, phq3, phq4, phq5, phq6, phq7, phq8, phq9], async function(err) {
-    if (err) {
+   db.run(sql, [
+    day_number,
+    record_date,
+    name,
+    bedtime,
+    waketime,
+    weather,
+    sunlight_completed,
+    feeling,
+    sleepiness,
+    mood_good,
+    mood_depressed,
+    q1,
+    q2,
+    q3,
+    q4,
+    q5,
+    q6,
+    q7,
+    q8,
+    phq1,
+    phq2,
+    phq3,
+    phq4,
+    phq5,
+    phq6,
+    phq7,
+    phq8,
+    phq9
+], async function(err) {
         console.error('Error inserting record:', err.message);
         return res.status(500).json({ error: 'Failed to save record.' });
     }
@@ -132,7 +160,7 @@ app.post('/api/records', (req, res) => {
         console.error("Fetch failed:", err);
         return res.status(500).json({ error: "fetch_failed" });
     }
-  });
+});
 }); 
 
 // API Endpoint to get all records for Admin
