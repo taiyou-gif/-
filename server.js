@@ -104,10 +104,10 @@ app.post('/api/records', (req, res) => {
     // sunlight_completed is true if they reached this point
     const sunlight_completed = true;
 
-    const sql = `INSERT INTO records (day_number, record_date, participant_name, bedtime, waketime, weather, sunlight_completed, feeling, sleepiness, mood_good, mood_depressed, q1, q2, q3, q4, q5, q6, q7, q8, phq1, phq2, phq3, phq4, phq5, phq6, phq7, phq8, phq9) 
-                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+    const sql = `INSERT INTO records (day_number, record_date, participant_name, bedtime, waketime, weather, sunlight_completed, feeling, q1, q2, q3, q4, q5, q6, q7, q8, phq1, phq2, phq3, phq4, phq5, phq6, phq7, phq8, phq9) 
+                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
                  
-   db.run(sql, [
+db.run(sql, [
     day_number,
     record_date,
     name,
@@ -115,33 +115,14 @@ app.post('/api/records', (req, res) => {
     waketime,
     weather,
     sunlight_completed,
-    feeling,
-    sleepiness,
-    mood_good,
-    mood_depressed,
-    q1,
-    q2,
-    q3,
-    q4,
-    q5,
-    q6,
-    q7,
-    q8,
-    phq1,
-    phq2,
-    phq3,
-    phq4,
-    phq5,
-    phq6,
-    phq7,
-    phq8,
-    phq9
+    q1, q2, q3, q4, q5, q6, q7, q8,
+    phq1, phq2, phq3, phq4, phq5, phq6, phq7, phq8, phq9
 ], async function(err) {
+    if (err) {
         console.error('Error inserting record:', err.message);
         return res.status(500).json({ error: 'Failed to save record.' });
     }
 
-    // ★ ここから追加（GAS に送る処理）
     try {
         const response = await fetch(process.env.GAS_ENDPOINT, {
             method: "POST",
@@ -160,8 +141,9 @@ app.post('/api/records', (req, res) => {
         console.error("Fetch failed:", err);
         return res.status(500).json({ error: "fetch_failed" });
     }
-});
-}); 
+}); // ← ★ここで db.run を閉じる
+}); // ← ★ここで app.post を閉じる
+
 
 // API Endpoint to get all records for Admin
 app.get('/api/records', (req, res) => {
