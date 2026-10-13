@@ -10,22 +10,6 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(cors());
 app.use(express.json());
-
-// --- Basic Auth for admin page ---
-const auth = { login: 'sunlight reserch manage', password: 'taiyou1234567890' };
-
-app.use('/admin.html', (req, res, next) => {
-    const b64auth = (req.headers.authorization || '').split(' ')[1] || '';
-    const [login, password] = Buffer.from(b64auth, 'base64').toString().split(':');
-
-    if (login === auth.login && password === auth.password) {
-        return next();
-    }
-
-    res.set('WWW-Authenticate', 'Basic realm="Admin Area"');
-    res.status(401).send('Authentication required.');
-});
-
 app.use(express.static(path.join(__dirname, 'public')));
 
 // DB setup
@@ -57,6 +41,15 @@ const db = new sqlite3.Database(dbFile, (err) => {
             q6 TEXT,
             q7 TEXT,
             q8 TEXT,
+            phq1 TEXT,
+            phq2 TEXT,
+            phq3 TEXT,
+            phq4 TEXT,
+            phq5 TEXT,
+            phq6 TEXT,
+            phq7 TEXT,
+            phq8 TEXT,
+            phq9 TEXT,
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP
         )`, (err) => {
             if (!err) {
@@ -74,31 +67,38 @@ const db = new sqlite3.Database(dbFile, (err) => {
                 db.run(`ALTER TABLE records ADD COLUMN q6 TEXT`, () => {});
                 db.run(`ALTER TABLE records ADD COLUMN q7 TEXT`, () => {});
                 db.run(`ALTER TABLE records ADD COLUMN q8 TEXT`, () => {});
+                db.run(`ALTER TABLE records ADD COLUMN phq1 TEXT`, () => {});
+                db.run(`ALTER TABLE records ADD COLUMN phq2 TEXT`, () => {});
+                db.run(`ALTER TABLE records ADD COLUMN phq3 TEXT`, () => {});
+                db.run(`ALTER TABLE records ADD COLUMN phq4 TEXT`, () => {});
+                db.run(`ALTER TABLE records ADD COLUMN phq5 TEXT`, () => {});
+                db.run(`ALTER TABLE records ADD COLUMN phq6 TEXT`, () => {});
+                db.run(`ALTER TABLE records ADD COLUMN phq7 TEXT`, () => {});
+                db.run(`ALTER TABLE records ADD COLUMN phq8 TEXT`, () => {});
+                db.run(`ALTER TABLE records ADD COLUMN phq9 TEXT`, () => {});
             }
         });
     }
 });
 
-app.post('/api/records', async (req, res) => {
-    const recordData = req.body;
+// API Endpoint to save record
+app.post('/api/records', (req, res) => {
+    const { day_number, record_date, name, bedtime, waketime, weather, feeling, sleepiness, mood_good, mood_depressed, q1, q2, q3, q4, q5, q6, q7, q8, phq1, phq2, phq3, phq4, phq5, phq6, phq7, phq8, phq9 } = req.body;
+    
+    // sunlight_completed is true if they reached this point
+    const sunlight_completed = true;
 
-    try {
-        const response = await fetch(process.env.GAS_ENDPOINT, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(recordData)
-        });
-
-        if (!response.ok) {
-            console.error("GAS error:", await response.text());
-            return res.status(500).json({ error: "GAS_error" });
+    const sql = `INSERT INTO records (day_number, record_date, participant_name, bedtime, waketime, weather, sunlight_completed, feeling, sleepiness, mood_good, mood_depressed, q1, q2, q3, q4, q5, q6, q7, q8, phq1, phq2, phq3, phq4, phq5, phq6, phq7, phq8, phq9) 
+                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+                 
+    db.run(sql, [day_number, record_date, name, bedtime, waketime, weather, sunlight_completed, feeling, sleepiness, mood_good, mood_depressed, q1, q2, q3, q4, q5, q6, q7, q8, phq1, phq2, phq3, phq4, phq5, phq6, phq7, phq8, phq9], function(err) {
+        if (err) {
+            console.error('Error inserting record:', err.message);
+            res.status(500).json({ error: 'Failed to save record.' });
+        } else {
+            res.status(201).json({ message: 'Record saved successfully!', id: this.lastID });
         }
-
-        return res.status(201).json({ message: "Record saved to Google Sheets" });
-    } catch (err) {
-        console.error("Fetch failed:", err);
-        return res.status(500).json({ error: "fetch_failed" });
-    }
+    });
 });
 
 // API Endpoint to get all records for Admin
