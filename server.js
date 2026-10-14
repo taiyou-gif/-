@@ -104,8 +104,8 @@ app.post('/api/records', (req, res) => {
     // sunlight_completed is true if they reached this point
     const sunlight_completed = true;
 
-    const sql = `INSERT INTO records (day_number, record_date, participant_name, bedtime, waketime, weather, sunlight_completed, feeling, sleepiness, mood_good, mood_depressed, q1, q2, q3, q4, q5, q6, q7, q8, phq1, phq2, phq3, phq4, phq5, phq6, phq7, phq8, phq9) 
-                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+    const sql = `INSERT INTO records (day_number, record_date, participant_name, bedtime, waketime, weather, sunlight_completed, q1, q2, q3, q4, q5, q6, q7, q8, phq1, phq2, phq3, phq4, phq5, phq6, phq7, phq8, phq9) 
+                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
                  
 db.run(sql, [
     day_number,
@@ -115,10 +115,6 @@ db.run(sql, [
     waketime,
     weather,
     sunlight_completed,
-    feeling,
-    sleepiness,
-    mood_good,
-    mood_depressed,
     q1, q2, q3, q4, q5, q6, q7, q8,
     phq1, phq2, phq3, phq4, phq5, phq6, phq7, phq8, phq9
 ], async function(err) {
